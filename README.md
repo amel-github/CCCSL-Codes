@@ -7,6 +7,8 @@
 Check for consistency between the four levels of coding.
 Detect possible duplicates.
 
+## Global description of the CCCSL dataset
+
 ## Examples of data usages
 Identify worldwide decision patterns over time
 Mapping the timeline of governmental intervention through the epidemic
