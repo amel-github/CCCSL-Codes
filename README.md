@@ -1,5 +1,5 @@
 # CCCSL-Usage-Notes
 
-# Licence
+Licence
 CC BY-SA 4.0
 
