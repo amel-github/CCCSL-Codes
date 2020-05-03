@@ -1,5 +1,5 @@
 ---
-title: '**CSH COVID-19 Control Strategies List: A structured open dataset of governmental interventions in response to COVID-19**'
+title: '**CSH COVID-19 Control Strategies List: A structured open dataset of government interventions in response to COVID-19**'
 output:
   pdf_document: default
   html_document: default
