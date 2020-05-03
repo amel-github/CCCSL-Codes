@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gexf xmlns="http://www.gexf.net/1.3" xmlns:viz="http://www.gexf.net/1.3/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.3 http://www.gexf.net/1.3/gexf.xsd" version="1.3">
+  <meta lastmodifieddate="2020-05-03">
+    <creator>NodosChile</creator>
+    <description>A GEXF file written in R with "rgexf"</description>
+    <keywords>GEXF, NodosChile, R, rgexf, Gephi</keywords>
+  </meta>
+  <graph mode="static" defaultedgetype="directed">
+    <attributes class="node" mode="static">
+      <attribute id="att1" title="L1" type="string"/>
+      <attribute id="att2" title="id" type="integer"/>
+    </attributes>
+    <nodes>
+      <node id="1" label="Airport health check">
+        <attvalues>
+          <attvalue for="att1" value="Case identification, contact tracing and related measures"/>
+          <attvalue for="att2" value="1"/>
+        </attvalues>
+        <viz:color r="0" g="0" b="255" a="1"/>
+        <viz:position x="84.1848459717209" y="100" z="0"/>
+        <viz:size value="5.28301886792453"/>
+      </node>
+      <node id="2" label="Border health check">
+        <attvalues>
+          <attvalue for="att1" value="Case identification, contact tracing and related measures"/>
+          <attvalue for="att2" value="2"/>
+        </attvalues>
+        <viz:color r="0" g="0" b="255" a="1"/>
+        <viz:position x="91.578838910963" y="-5.68066636860304" z="0"/>
+        <viz:size value="4.52830188679245"/>
+      </node>
+      <node id="3" label="Enhance detection system">
+        <attvalues>
+          <attvalue for="att1" value="Case identification, contact tracing and related measures"/>
+          <attvalue for="att2" value="3"/>
+        </attvalues>
+        <viz:color r="0" g="0" b="255" a="1"/>
+        <viz:position x="83.8201709459321" y="13.6756835326178" z="0"/>
+        <viz:size value="6.9811320754717"/>
+      </node>
+      <node id="6" label="Quarantine">
+        <attvalues>
+          <attvalue for="att1" value="Case identification, contact tracing and related measures"/>
+          <attvalue for="att2" value="6"/>
+        </attvalues>
+        <viz:color r="0" g="0" b="255" a="1"/>
+        <viz:position x="64.1938860528967" y="-2.76370684607798" z="0"/>
+        <viz:size value="7.16981132075472"/>
+      </node>
+      <node id="11" label="Tracing and monitoring">
+        <attvalues>
+          <attvalue for="att1" value="Case identification, contact tracing and related measures"/>
+          <attvalue for="att2" value="11"/>
+        </attvalues>
+        <viz:color r="0" g="0" b="255" a="1"/>
+        <viz:position x="100" y="-14.2142358272451" z="0"/>
+        <viz:size value="4.15094339622642"/>
+      </node>
+      <node id="17" label="Enhance emergency response mechanisms">
+        <attvalues>
+          <attvalue for="att1" value="Healthcare and public health capacity"/>
+          <attvalue for="att2" value="17"/>
+        </attvalues>
+        <viz:color r="150" g="29" b="26" a="1"/>
+        <viz:position x="10.2698792593547" y="12.5850239084267" z="0"/>
+        <viz:size value="7.16981132075472"/>
+      </node>
+      <node id="20" label="Enhance laboratory testing">
+        <attvalues>
+          <attvalue for="att1" value="Healthcare and public health capacity"/>
+          <attvalue for="att2" value="20"/>
+        </attvalues>
+        <viz:color r="150" g="29" b="26" a="1"/>
+        <viz:position x="25.9342567125949" y="-50.6075872990265" z="0"/>
+        <viz:size value="6.41509433962264"/>
+      </node>
+      <node id="21" label="Increase availability of PPE">
+        <attvalues>
+          <attvalue for="att1" value="Healthcare and public health capacity"/>
+          <attvalue for="att2" value="21"/>
+        </attvalues>
+        <viz:color r="150" g="29" b="26" a="1"/>
+        <viz:position x="10.8220229203805" y="-58.120314777224" z="0"/>
+        <viz:size value="5.66037735849057"/>
+      </node>
+      <node id="22" label="Increase healthcare workforce">
+        <attvalues>
+          <attvalue for="att1" value="Healthcare and public health capacity"/>
+          <attvalue for="att2" value="22"/>
+        </attvalues>
+        <viz:color r="150" g="29" b="26" a="1"/>
+        <viz:position x="25.3215966990415" y="-82.0822687125827" z="0"/>
+        <viz:size value="4.90566037735849"/>
+      </node>
+      <node id="25" label="Increase patient capacity">
+        <attvalues>
+          <attvalue for="att1" value="Healthcare and public health capacity"/>
+          <attvalue for="att2" value="25"/>
+        </attvalues>
+        <viz:color r="150" g="29" b="26" a="1"/>
+        <viz:position x="1.30752333023187" y="-100" z="0"/>
+        <viz:size value="6.0377358490566"/>
+      </node>
+      <node id="34" label="Crisis management plans">
+        <attvalues>
+          <attvalue for="att1" value="Resource allocation"/>
+          <attvalue for="att2" value="34"/>
+        </attvalues>
+        <viz:color r="180" g="202" b="242" a="1"/>
+        <viz:position x="74.2400537320547" y="-68.6697009217392" z="0"/>
+        <viz:size value="6.22641509433962"/>
+      </node>
+      <node id="47" label="Educate and actively communicate with the public">
+        <attvalues>
+          <attvalue for="att1" value="Risk communication"/>
+          <attvalue for="att2" value="47"/>
+        </attvalues>
+        <viz:color r="191" g="0" b="255" a="1"/>
+        <viz:position x="51.1397209159005" y="64.4082323545549" z="0"/>
+        <viz:size value="9.62264150943396"/>
+      </node>
+      <node id="49" label="Closure of educational institutions">
+        <attvalues>
+          <attvalue for="att1" value="Social distancing"/>
+          <attvalue for="att2" value="49"/>
+        </attvalues>
+        <viz:color r="255" g="128" b="0" a="1"/>
+        <viz:position x="-46.5941941937122" y="-54.2735334268051" z="0"/>
+        <viz:size value="10"/>
+      </node>
+      <node id="51" label="Mass gathering cancellation">
+        <attvalues>
+          <attvalue for="att1" value="Social distancing"/>
+          <attvalue for="att2" value="51"/>
+        </attvalues>
+        <viz:color r="255" g="128" b="0" a="1"/>
+        <viz:position x="-14.6516961587118" y="-28.7003405290048" z="0"/>
+        <viz:size value="9.62264150943396"/>
+      </node>
+      <node id="52" label="Measures for special populations">
+        <attvalues>
+          <attvalue for="att1" value="Social distancing"/>
+          <attvalue for="att2" value="52"/>
+        </attvalues>
+        <viz:color r="255" g="128" b="0" a="1"/>
+        <viz:position x="-28.165670946534" y="-61.3067679361627" z="0"/>
+        <viz:size value="6.79245283018868"/>
+      </node>
+      <node id="55" label="Return operation of nationals living in regions at risk">
+        <attvalues>
+          <attvalue for="att1" value="Social distancing"/>
+          <attvalue for="att2" value="55"/>
+        </attvalues>
+        <viz:color r="255" g="128" b="0" a="1"/>
+        <viz:position x="-34.235895756925" y="51.5000271432825" z="0"/>
+        <viz:size value="4.90566037735849"/>
+      </node>
+      <node id="56" label="Small gathering cancellation">
+        <attvalues>
+          <attvalue for="att1" value="Social distancing"/>
+          <attvalue for="att2" value="56"/>
+        </attvalues>
+        <viz:color r="255" g="128" b="0" a="1"/>
+        <viz:position x="-12.6054967025322" y="-82.5452076539321" z="0"/>
+        <viz:size value="8.86792452830189"/>
+      </node>
+      <node id="59" label="Airport restriction">
+        <attvalues>
+          <attvalue for="att1" value="Travel restriction"/>
+          <attvalue for="att2" value="59"/>
+        </attvalues>
+        <viz:color r="255" g="255" b="0" a="1"/>
+        <viz:position x="-80.436470872869" y="-6.1499907042159" z="0"/>
+        <viz:size value="4.71698113207547"/>
+      </node>
+      <node id="62" label="Border restriction">
+        <attvalues>
+          <attvalue for="att1" value="Travel restriction"/>
+          <attvalue for="att2" value="62"/>
+        </attvalues>
+        <viz:color r="255" g="255" b="0" a="1"/>
+        <viz:position x="-100" y="-55.3079420130348" z="0"/>
+        <viz:size value="8.11320754716981"/>
+      </node>
+      <node id="68" label="Individual movement restrictions">
+        <attvalues>
+          <attvalue for="att1" value="Travel restriction"/>
+          <attvalue for="att2" value="68"/>
+        </attvalues>
+        <viz:color r="255" g="255" b="0" a="1"/>
+        <viz:position x="-65.5254366632201" y="-86.0377547578125" z="0"/>
+        <viz:size value="6.41509433962264"/>
+      </node>
+    </nodes>
+    <edges>
+      <edge id="0" source="1" target="3" weight="0.5780603"/>
+      <edge id="1" source="2" target="3" weight="0.6136387"/>
+      <edge id="2" source="6" target="3" weight="0.6589391"/>
+      <edge id="3" source="47" target="3" weight="0.5813915"/>
+      <edge id="4" source="55" target="3" weight="0.7038836"/>
+      <edge id="5" source="1" target="6" weight="0.6034446"/>
+      <edge id="6" source="17" target="6" weight="0.6086497"/>
+      <edge id="7" source="47" target="6" weight="0.5711671"/>
+      <edge id="8" source="55" target="6" weight="0.675389"/>
+      <edge id="9" source="1" target="17" weight="0.5272033"/>
+      <edge id="10" source="3" target="17" weight="0.5558778"/>
+      <edge id="11" source="47" target="17" weight="0.5611031"/>
+      <edge id="12" source="55" target="17" weight="0.6799496"/>
+      <edge id="13" source="2" target="20" weight="0.5180051"/>
+      <edge id="14" source="3" target="20" weight="0.5584534"/>
+      <edge id="15" source="11" target="20" weight="0.5831643"/>
+      <edge id="16" source="17" target="20" weight="0.5277414"/>
+      <edge id="17" source="21" target="20" weight="0.6407482"/>
+      <edge id="18" source="49" target="20" weight="0.5531417"/>
+      <edge id="19" source="51" target="20" weight="0.555685"/>
+      <edge id="20" source="52" target="20" weight="0.5489332"/>
+      <edge id="21" source="55" target="20" weight="0.5240026"/>
+      <edge id="22" source="59" target="20" weight="0.5314902"/>
+      <edge id="23" source="1" target="21" weight="0.515941"/>
+      <edge id="24" source="2" target="21" weight="0.5447821"/>
+      <edge id="25" source="11" target="21" weight="0.5666782"/>
+      <edge id="26" source="34" target="21" weight="0.5769692"/>
+      <edge id="27" source="52" target="21" weight="0.5010067"/>
+      <edge id="28" source="59" target="21" weight="0.521359"/>
+      <edge id="29" source="2" target="22" weight="0.5304417"/>
+      <edge id="30" source="21" target="22" weight="0.5687557"/>
+      <edge id="31" source="34" target="22" weight="0.5226792"/>
+      <edge id="32" source="2" target="25" weight="0.5792229"/>
+      <edge id="33" source="20" target="25" weight="0.5307896"/>
+      <edge id="34" source="21" target="25" weight="0.6015837"/>
+      <edge id="35" source="22" target="25" weight="0.6291655"/>
+      <edge id="36" source="34" target="25" weight="0.5829129"/>
+      <edge id="37" source="2" target="34" weight="0.5689592"/>
+      <edge id="38" source="3" target="34" weight="0.5122072"/>
+      <edge id="39" source="6" target="34" weight="0.5035206"/>
+      <edge id="40" source="17" target="34" weight="0.5206313"/>
+      <edge id="41" source="20" target="34" weight="0.6315737"/>
+      <edge id="42" source="49" target="34" weight="0.5474543"/>
+      <edge id="43" source="51" target="34" weight="0.5317098"/>
+      <edge id="44" source="55" target="34" weight="0.5009417"/>
+      <edge id="45" source="62" target="34" weight="0.5486871"/>
+      <edge id="46" source="1" target="47" weight="0.8777063"/>
+      <edge id="47" source="1" target="49" weight="0.6147359"/>
+      <edge id="48" source="2" target="49" weight="0.7873546"/>
+      <edge id="49" source="3" target="49" weight="0.7495172"/>
+      <edge id="50" source="6" target="49" weight="0.7859802"/>
+      <edge id="51" source="11" target="49" weight="0.7567828"/>
+      <edge id="52" source="17" target="49" weight="0.7757415"/>
+      <edge id="53" source="21" target="49" weight="0.8816192"/>
+      <edge id="54" source="47" target="49" weight="0.6821895"/>
+      <edge id="55" source="51" target="49" weight="0.9044167"/>
+      <edge id="56" source="55" target="49" weight="0.6466658"/>
+      <edge id="57" source="59" target="49" weight="0.8139248"/>
+      <edge id="58" source="1" target="51" weight="0.6097638"/>
+      <edge id="59" source="2" target="51" weight="0.7947021"/>
+      <edge id="60" source="3" target="51" weight="0.744271"/>
+      <edge id="61" source="6" target="51" weight="0.790188"/>
+      <edge id="62" source="11" target="51" weight="0.78024"/>
+      <edge id="63" source="17" target="51" weight="0.7826859"/>
+      <edge id="64" source="47" target="51" weight="0.6944736"/>
+      <edge id="65" source="55" target="51" weight="0.6570989"/>
+      <edge id="66" source="59" target="51" weight="0.7817946"/>
+      <edge id="67" source="2" target="52" weight="0.5603311"/>
+      <edge id="68" source="6" target="52" weight="0.5682169"/>
+      <edge id="69" source="11" target="52" weight="0.5236884"/>
+      <edge id="70" source="17" target="52" weight="0.5792429"/>
+      <edge id="71" source="34" target="52" weight="0.5413887"/>
+      <edge id="72" source="49" target="52" weight="0.6253535"/>
+      <edge id="73" source="51" target="52" weight="0.6197916"/>
+      <edge id="74" source="2" target="56" weight="0.6327363"/>
+      <edge id="75" source="3" target="56" weight="0.5997988"/>
+      <edge id="76" source="6" target="56" weight="0.6488132"/>
+      <edge id="77" source="11" target="56" weight="0.6329514"/>
+      <edge id="78" source="17" target="56" weight="0.5997513"/>
+      <edge id="79" source="20" target="56" weight="0.715091"/>
+      <edge id="80" source="21" target="56" weight="0.6815955"/>
+      <edge id="81" source="22" target="56" weight="0.7347549"/>
+      <edge id="82" source="25" target="56" weight="0.7608058"/>
+      <edge id="83" source="34" target="56" weight="0.6967284"/>
+      <edge id="84" source="47" target="56" weight="0.557828"/>
+      <edge id="85" source="49" target="56" weight="0.7863068"/>
+      <edge id="86" source="51" target="56" weight="0.7438732"/>
+      <edge id="87" source="52" target="56" weight="0.7922136"/>
+      <edge id="88" source="55" target="56" weight="0.5035832"/>
+      <edge id="89" source="59" target="56" weight="0.6589684"/>
+      <edge id="90" source="62" target="56" weight="0.7626292"/>
+      <edge id="91" source="2" target="62" weight="0.7791096"/>
+      <edge id="92" source="3" target="62" weight="0.6058441"/>
+      <edge id="93" source="6" target="62" weight="0.6466083"/>
+      <edge id="94" source="11" target="62" weight="0.5679797"/>
+      <edge id="95" source="17" target="62" weight="0.6578379"/>
+      <edge id="96" source="20" target="62" weight="0.6684706"/>
+      <edge id="97" source="47" target="62" weight="0.5542094"/>
+      <edge id="98" source="49" target="62" weight="0.7473415"/>
+      <edge id="99" source="51" target="62" weight="0.7171175"/>
+      <edge id="100" source="52" target="62" weight="0.7389687"/>
+      <edge id="101" source="55" target="62" weight="0.5394401"/>
+      <edge id="102" source="59" target="62" weight="0.6396455"/>
+      <edge id="103" source="2" target="68" weight="0.5185352"/>
+      <edge id="104" source="20" target="68" weight="0.5444824"/>
+      <edge id="105" source="21" target="68" weight="0.5538895"/>
+      <edge id="106" source="25" target="68" weight="0.5250154"/>
+      <edge id="107" source="34" target="68" weight="0.5089861"/>
+      <edge id="108" source="49" target="68" weight="0.5227773"/>
+      <edge id="109" source="51" target="68" weight="0.5065748"/>
+      <edge id="110" source="52" target="68" weight="0.5137843"/>
+      <edge id="111" source="56" target="68" weight="0.6020022"/>
+      <edge id="112" source="62" target="68" weight="0.5530824"/>
+    </edges>
+  </graph>
+</gexf>
+
