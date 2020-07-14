@@ -80,7 +80,7 @@ The CCCSL dataset presents data for `r length(unique(measures$Country))` countri
 
 The median number of NPIs implemented by the governments to mitigate the burden of COVID-19 is `r median(count.country$Country)` (min. = `r min(count.country$Country)`; max. = `r max(count.country$Country)`). 
 
-*Note: Version 2 of the CCCSL dataset presents a consolidated coding scheme. Data on Poland, Senegal, and Ghana have been added as well as data for 24 states of the USA*
+*Note: Version 2 of the CCCSL dataset presents a consolidated coding scheme. Data on Poland, Senegal, and Ghana have been added as well as data for 24 states of the USA.*
 ```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4}
 
 ## plot of the  number of the NPIs implemented worldwide over calendar time
@@ -100,6 +100,8 @@ The median number of NPIs implemented by the governments to mitigate the burden 
   theme(legend.key.size = unit(0.5, "cm"),
         legend.text = element_text(size = 10)) + 
   guides(fill=guide_legend(nrow=4, byrow=TRUE))
+```
+
 
 ```{r plot1, echo=FALSE}
 plot(plot1, caption = "Histogram of the NPIs recorded in the CCCSL at level 1 (themes) of the coding scheme and time of implementation over calendar time (Diamond Princess cruise ship excluded).")
@@ -151,6 +153,7 @@ kable(table2.f, booktabs = T,
              caption = "Top 20 most frequent NPIs recorded in the CCCSL at level 2 (categories) of the coding scheme (Diamond Princess cruise ship excluded).")
 ```
 
+\pagebreak
 
 # Country-based summaries of NPIs recorded in the CCCSL at level 1 (themes) of the coding scheme.
 ```{r echo=FALSE, fig.height=4, fig.width=8, message=FALSE}
@@ -266,8 +269,10 @@ plot2 <- ggplot(edates, aes(x = Date, fill = Measure_L1)) +
   theme(legend.key.size = unit(0.5, "cm"),
         legend.text = element_text(size = 10)) + 
   guides(fill=guide_legend(nrow=4, byrow=TRUE))
+```
 
-#```{r plot2, echo=FALSE}
+
+```{r plot2, echo=FALSE}
 plot(plot2, caption = "NPIs recorded in the CCCSL at level 1 (themes) of the coding scheme and time of implementation over epidemic age and all countries (t0 = day when 10 cases were reported)")
 ```
 
@@ -362,6 +367,8 @@ plot3 <- edates %>%
   theme(legend.key.size = unit(0.5, "cm"),
         legend.text = element_text(size = 10)) + 
   guides(fill=guide_legend(nrow=4, byrow=TRUE))
+```
+
 
 ```{r plot3, echo=FALSE}
 plot(plot3, caption = "Stacked area chart of the NPIs recorded in the CCCSL at level 1 (themes) of the coding scheme. Time is in epidemic age (t0 = day when 10 cases were reported).")
@@ -495,6 +502,7 @@ edates2 [edates2$Region=="Hong Kong",] %>%
   guides(fill=guide_legend(nrow=4, byrow=TRUE))
 
 ```
+
 ### India
 ```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4}
 plot.country ( "India")
