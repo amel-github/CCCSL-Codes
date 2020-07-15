@@ -1,4 +1,4 @@
-# A structured open dataset of government interventions in response to COVID-19 -- Codes for exploration and visualisation
+# A structured open dataset of government interventions in response to COVID-19 -- Codes for exploration and visualisation - Version 2
 
 ## Background & Summary of the Project
 In response to the COVID-19 pandemic, governments have implemented a wide range of non-pharmaceutical interventions (NPIs). Monitoring and documenting government strategies during the COVID-19 crisis is crucial to understand the progression of the epidemic. The Complexity Science Hub COVID-19 Control Strategies List (CCCSL) project aims to generate a comprehensive and structured dataset on government responses to COVID-19, including the respective time schedules of their implementation, precise and flexible enough to enable a global use in support of the fight against COVID-19.<br>
@@ -10,6 +10,8 @@ The project webpage is accessible here: http://covid19-interventions.com/.<br>
 A dynamic version of the dataset, which is continually updated, can be accessed via Github: https://github.com/amel-github/covid19-interventionmeasures
 
 The codes provided here enable users to explore and visualise the CCCSL dataset.<br>
+
+A static version of the dataset is provided on this repository.
 
 
 ## Citation
