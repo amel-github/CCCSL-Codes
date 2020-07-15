@@ -124,7 +124,7 @@ We provide variations in the codes to change the value for t0: <br>
 
  The optimal number of cluster k is determined using the [Elbow method](https://doi.org/10.3390/j2020016). Briefly, the elbow methods runs k-means clustering on the dataset for a range of values of k (set here from 1 to 15), and for each value of k calculates the sum of squared errors (SSE). We then plot the SSE for each value of k and identified the best value of k where the line chart looks like an arm ("elbow").<br>
 
- As of date of publication, using the dataset dated 2020-07-10, the best value of k was seven, explaining 80.3% of the variance ([Figure](OptimalNumber-K.png)).
+ As of date of publication, using the dataset dated 2020-07-10, the best value of k was eight, explaining 82.8% of the variance ([Figure](OptimalNumber-K.png)).
   
  * [Clustering_kmeans.R](Clustering_kmeans.R)<br>
  
