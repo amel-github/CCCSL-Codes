@@ -90,8 +90,9 @@ if(length(not_installed)) install.packages(not_installed)
 
 For all results run  [1_Run_This_Script_for_all_results.Rmd](1_Run_This_Script_for_all_results.Rmd) script.
 #### Step 1
-
-Nils - R  script
+This script creates binary representations of the CCCSL data set on category (L2)
+ * [make_binary_measure_tables.R](make_binary_measure_tables.R)
+ 
 #### Step 2
 Download the data from [COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
  * [Get_JohnsHopkins_data.R](Get_JohnsHopkins_data.R)
