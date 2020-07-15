@@ -1,0 +1,69 @@
+---
+title: "1_Run_This_Script_for_all_results"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Visualisation and exploration of the Complexity Science Hub Control Strategies List (CCCSL)
+Script purpose: This script enalbles to call all scripts listed in the project and to obtain the different plots that provide a global overview of the government interventions with regard to the timeline of implementation (heat map) or aggressiveness/responsiveness of the government responses (clustering)
+Date:12.07.2020.
+Authors: Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
+
+
+### Install and load packages
+```{r}
+my_packages <- c("dplyr", "factoextra" , "ggplot2" , "plotly" , 
+                 "RColorBrewer" , "reshape2"   ,"reticulate" , "stringr" , 
+                 "svglite" , "tidyverse"  , "vegan" )  
+not_installed <- my_packages[!(my_packages %in% installed.packages()[ , "Package"])]    # Extract not installed packages
+if(length(not_installed)) install.packages(not_installed)                               # Install not installed packages
+```
+
+
+Run scripts on static data for the same results as in the paper (do not run script - make_binary_measure_tables.R )
+
+## Make_binary_measure_tables
+This script creates binary representations of the CCCSL data set on the level (L2, category) of the hierachical coding
+```{r, echo=FALSE, message=FALSE, results='hide'}
+source("make_binary_measure_tables.R")
+```
+
+
+
+## Case data: Get_JohnsHopkins_data
+Download the data from [COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
+
+```{r, echo=FALSE, message=FALSE}
+source("Get_JohnsHopkins_data.R")
+```
+
+## Get_measures_data
+Read data from the binary file take names of all countries, all themes (Measure_L1), all categories (Measure_L2).
+
+```{r, echo=FALSE, message=FALSE}
+source("Get_measures_data.R")
+```
+
+## Visualise the timeline of the government interventions: Plot_heatmaps
+We propose to visualise the time series of the date of implementation of the measures recorded in the CCCSL at level 2 (categories) in the 56 countries using a heat map. To highlight country-based differences in the timeline of implementation thorough the epidemic, we used the epidemic age instead of calendar time and considered t0 as the day when the number of confirmed cases reaches 10.
+To plot and save the Measures_Countries_time_of_activation\_zeroday10cases.png and Measures_Countries_time_of_activation_zeroday10cases.pdf
+
+```{r, echo=FALSE, message=FALSE, fig.width=15, fig.height=15, results='hide'}
+
+source("Plot_heatmap_activation_of_measures_zeroday_10cases.R")
+
+```
+
+ ## Visualise the aggressiveness and responsiveness of the government control strategies: Clustering_kmeans
+ 
+ In order to partition the countries based on the aggressiveness of the control strategy (number of measures) and responsiveness (timeline), we propose a [k-means clustering method](https://doi.org/10.3390/j2020016).
+
+```{r  message=FALSE, error=FALSE}
+source("Clustering_kmeans.R")
+p
+```
+
