@@ -105,7 +105,7 @@ We used the epidemic age instead of calendar time and considered t0 as the day w
 To plot and save the Measures_Countries_time_of_activation\_zeroday10cases.png and Measures_Countries_time_of_activation_zeroday10cases.pdf
 * [Plot_heatmap_activation_of_measures_zeroday_10cases.R](Plot_heatmap_activation_of_measures_zeroday_10cases.R)
 
-We provide three other scripts with variable values for t0: <br>
+We provide variations in the codes to change the value for t0: <br>
 •	t0 = the day when the number of confirmed cases reaches 100 cases: [Plot_heatmap_activation_of_measures_zeroday_10cases.R](Plot_heatmap_activation_of_measures_zeroday_10cases.R) <br>
 •	t0 = the day when the number of confirmed cases reaches 200 cases: [Plot_heatmap_activation_of_measures_zeroday_200cases.R](Plot_heatmap_activation_of_measures_zeroday_200cases.R) <br>
 •	t0 = the day with the first registered death: [Plot_heatmap_activation_of_measures_zeroday_1stdeaths.R](Plot_heatmap_activation_of_measures_zeroday_1stdeath.R) <br>
