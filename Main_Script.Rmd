@@ -1,0 +1,130 @@
+---
+title: "**CSH COVID-19 Control Strategies List: A structured open dataset of government interventions in response to COVID-19**"
+output: pdf_document
+subtitle: Results Script
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This markdown script contains the code to prepare, analyze, and visualize the results of the article.
+
+# Preparing and loading data
+
+## Install and load packages
+```{r}
+my_packages <- c("countrycode", "dplyr", "factoextra", "ggplot2", "plot3D", "plotly", 
+                 "reshape2", "reticulate", "stringr",  "tidyverse", "vegan",
+                 "incidence", "RColorBrewer", "kableExtra")  
+
+# Extract not installed packages
+not_installed <- my_packages[!(my_packages %in% installed.packages()[ , "Package"])]    
+
+# Install not installed packages
+if(length(not_installed)) install.packages(not_installed)                               
+```
+
+## Prepare measures data
+
+We process data into binary representations of the CCCSL data set on the level (L2, category) of the hierachical coding:
+```{r, message=FALSE, results='hide'}
+source("make_binary_measure_tables.R")
+```
+
+## Download cases data
+Download the data from [COVID-19 Data Repository by the Center for Systems Science and Engineering (CSSE) at Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19)
+
+```{r, message=FALSE}
+source("Get_JohnsHopkins_data.R")
+```
+
+## Load measures data
+Read data from the binary file and take names of all countries, all themes (Measure_L1), all categories (Measure_L2).
+
+```{r, message=FALSE}
+source("Get_measures_data.R")
+```
+
+# Visualise the timeline of implementation of the government interventions using a heatmap
+
+We visualise the time series of the dates of implementation of the NPIs recorded in the CCCSL at level 2 (categories) in the 56 countries using a heat map. To highlight country-based differences in the timeline of implementation thorough the epidemic, we used the epidemic age instead of calendar time and considered t0 as the day when the number of confirmed cases reaches 10.
+
+```{r, message=FALSE, fig.width=15, fig.height=15, results='hide', warning=FALSE}
+source("Plot_heatmap_activation_of_measures_zeroday_10cases.R")
+```
+*Fig. 2. Heat map of the date of implementation of the NPIs recorded in the CCCSL at level 2 (categories) in 56 countries. Time is in epidemic age with t0 = day when 10 cases were reported*
+
+## Visualise the aggressiveness and responsiveness of the government control strategies, clustering countries
+ 
+In order to partition the countries based on the aggressiveness of the control strategy (number of measures) and responsiveness (timeline), we calculate clusters with the [k-means clustering method](https://doi.org/10.3390/j2020016).
+
+```{r  message=FALSE, warning=FALSE}
+source("Clustering_kmeans.R")
+```
+
+As of publication date, using the dataset dated 2020-07-12, a clustering with k=8 explains 82.8% of the variance.
+
+\pagebreak
+
+```{r, echo=FALSE, warning = FALSE, message=FALSE}
+library(kableExtra)
+table.clusters <- cbind(cluster.results$size, cluster.results$centers[,c(1:3)], cluster.results$withinss)
+colnames(table.clusters) <- c("Size","Anticipatory measures", "Early measures", "Late measures", "Within cluster sum of squares by cluster")
+kable(table.clusters,  booktabs = T,
+             caption = "Summary of the cluster characteristics")
+```
+
+```{r, echo=FALSE, warning = FALSE}
+list.categ <- cbind (c(1:40),filtered_names_l2)
+kable(list.categ, col.names = NULL, booktabs = T,
+             caption = "List of the 40 categories used")
+```
+
+```{r  message=FALSE, fig.width=7, fig.height=7, echo=F, warning=F, results='hide'}
+df$CC3 <- countrycode(df$chosen_coutries, origin="country.name", destination="iso3c")
+
+# We manually set Kosovo's ISO 3 code to the convention used in the dataset
+df$CC3[df$chosen_coutries=="Kosovo"] <- "RKS"
+
+x <- df$Early_measures
+y <- df$Late_measures
+z <- df$Anticipatory_measures
+
+#We manually shift some labels to help visibility in the plot
+z[df$CC3 == "SVN"] <- z[df$CC3 == "SVN"] - 0.5
+z[df$CC3 == "SYR"] <- z[df$CC3 == "SYR"] + 0.25
+z[df$CC3 == "SLV"] <- z[df$CC3 == "SLV"] - 0.25
+z[df$CC3 == "FIN"] <- z[df$CC3 == "FIN"] + 0.25
+z[df$CC3 == "KAZ"] <- z[df$CC3 == "KAZ"] - 0.25
+x[df$CC3 == "KAZ"] <- x[df$CC3 == "KAZ"] + 0.25
+y[df$CC3 == "KAZ"] <- y[df$CC3 == "KAZ"] + 0.75
+y[df$CC3 == "BEL"] <- y[df$CC3 == "BEL"] - 0.25
+x[df$CC3 == "BEL"] <- x[df$CC3 == "BEL"] + 0.25
+
+
+pdf("clustering.pdf") #To convert to eps, you can run in linux pdftops and then ps2eps
+
+s3d <- scatter3D(x = df$Early_measures,
+                 y = df$Late_measures,
+                 z= df$Anticipatory_measures, pch = 19, col=hcl.colors(8, palette = "Set 3"), colvar=as.numeric(df$KM),
+                 xlab = "Early measures", 
+                 ylab = "Late measures", 
+                 zlab = "Anticipatory measures",
+                 cex.symbols = 4*df$size, phi = 10, theta=-225, bty="b2", colkey=FALSE, ticktype= "detailed", r=4)
+
+text3D(x,y,z, labels = df$CC3, cex= 0.5, col = "black", adj=0.5, add = T)
+
+dev.off()
+
+s3d <- scatter3D(x = df$Early_measures,
+                 y = df$Late_measures,
+                 z= df$Anticipatory_measures, pch = 19, col=hcl.colors(8, palette = "Set 3"), colvar=as.numeric(df$KM),
+                 xlab = "Early measures", 
+                 ylab = "Late measures", 
+                 zlab = "Anticipatory measures",
+                 cex.symbols = 4*df$size, phi = 10, theta=-225, bty="b2", colkey=FALSE, ticktype= "detailed", r=4)
+
+text3D(x,y,z, labels = df$CC3, cex= 0.5, col = "black", adj=0.5, add = T)
+```
+
