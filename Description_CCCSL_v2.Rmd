@@ -1,6 +1,6 @@
 ---
 title: '**CSH COVID-19 Control Strategies List: A structured open dataset of government interventions in response to COVID-19**'
-author: ""
+author: "Amélie Desvars-Larrive, David Garcia"
 output:
   pdf_document: default
  # html_document: default
