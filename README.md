@@ -163,5 +163,5 @@ CC BY-SA 4.0 License - see the [CC BY-SA 4.0d](https://creativecommons.org/licen
 
 * This work was coordinated by the Complexity Science Hub Vienna, Austria
 * This work is supported by the University of Veterinary Medicine Vienna, Austria.
-* The authors acknowledge Petar Sekulic for his advise on the analyses. We warmly thank Caspar Matzhold and Michaela Kaleta for checking and testing our code components.
+* The authors acknowledge Petar Sekulic for his advice on the analyses. We warmly thank Caspar Matzhold and Michaela Kaleta for checking and testing our code components.
 
