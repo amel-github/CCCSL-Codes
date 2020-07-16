@@ -22,6 +22,16 @@ library(kableExtra)
 ```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4, results='hide',, warning = FALSE}
 ## Make_binary_measure_tables
 #This chunk creates a binary representations of the CCCSL data set on the level (L2, category) of the hierachical coding
+
+# Downloads the CCCSL data set on implemented non-pharmaceutical interventions (NPI) and writes the two csv files "bin_COVID19_measures.csv" 
+# and "bin_COVID19_measures_cumulative.csv" into the current directory. Both files contain a column "Country" and a column "Date", as well 
+# as one column for each NPI category (L2). The columns coresponding to NPI categories contain boolean values. In a given row and a given
+# column of "bin_COVID19_measures.csv" corresponding to a given NPI M, the value TRUE indicates that on the given date, M was put in place
+# in the given country. Otherwise, the entry is FALSE. Similarly, in a given row and a given column of "bin_COVID19_measures_cumulative.csv"
+# corresponding to a given NPI M, the value TRUE indicates that on or before the given date, M was put in place in the given country. 
+# Otherwise, the entry is FALSE.
+
+
 library(readr)
 
 # Define url for accessing data
