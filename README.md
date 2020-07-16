@@ -81,9 +81,9 @@ Install and load packages:
 
 
 ```
- my_packages <- c( "dplyr", "factoextra" , "ggplot2" , "plotly" , "RColorBrewer" ,
- "reshape2"   ,"reticulate" , "stringr" , "svglite" , "tidyverse"  , "vegan" )     
- 
+my_packages <- c("countrycode", "dplyr", "factoextra", "ggplot2", "plot3D", "plotly", 
+                 "RColorBrewer", "reshape2", "reticulate", "stringr", 
+                 "svglite", "tidyverse", "vegan" )  
 # Extract not installed packages                           
 not_installed <- my_packages[!(my_packages %in% installed.packages()[ , "Package"])]    
 
