@@ -1,0 +1,620 @@
+---
+title: "**CSH COVID-19 Control Strategies List: A structured open dataset of government interventions in response to COVID-19**"
+author: "Elma Dervic, Nils Huag, Amélie Desvars-Larrive, David Garcia"
+output: pdf_document
+date: "16/07/2020"
+subtitle: Data Usages
+---
+
+``````{r, echo=FALSE, message=FALSE, results='hide', warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+### Install packages
+my_packages <- c("dplyr", "factoextra" , "ggplot2" , "plotly" , 
+                 "reshape2"   ,"reticulate" , "stringr" , 
+                 "svglite" , "tidyverse"  , "vegan" )  
+not_installed <- my_packages[!(my_packages %in% installed.packages()[ , "Package"])]    # Extract not installed packages
+if(length(not_installed)) install.packages(not_installed)                               # Install not installed packages
+library(knitr)
+library(kableExtra)
+```
+
+
+```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4, results='hide',, warning = FALSE}
+## Make_binary_measure_tables
+#This chunk creates a binary representations of the CCCSL data set on the level (L2, category) of the hierachical coding
+library(readr)
+
+# Define url for accessing data
+
+measurelist_url = 'https://raw.githubusercontent.com/amel-github/CCCSL-Codes/master/COVID19_non-pharmaceutical-interventions_version2_utf8_static_2020-07-12.csv'
+
+# Import data on intervention measures
+
+measure_df <- read_csv(measurelist_url)
+measure_df['Date'] <- lapply(measure_df['Date'],function(x) as.Date(x,'%d/%m/%Y'))
+
+measure_df['Date_numeric'] <- lapply(measure_df['Date'],function(x) as.numeric(x))
+
+# Create table of NPI categories (L2) and give unique ID to each category
+
+measurelist <- measure_df[,c("Measure_L1","Measure_L2")]
+measurelist <- measurelist[!duplicated(measurelist),]
+measurelist["Measure"] <- paste("L1: ",measurelist$Measure_L1," / L2: ",measurelist$Measure_L2)
+measurelist <- measurelist[order(measurelist$Measure),]
+measurelist['Measure_id'] <- c(1:dim(measurelist)[1])
+
+# Join measure_df with measurelist to get ID of each measure
+
+measure_df <- merge(measure_df,measurelist,by=c("Measure_L1","Measure_L2"))
+
+# Define date range to be covered by the output files
+
+day0 <- as.Date("2019/12/1",'%Y/%m/%d') 
+mindate <- as.numeric(day0) # day from which to start registering measures
+maxdate <- as.numeric(Sys.Date())-1 # day until which measures are recorded
+
+# Get list of all countries appearing in the data set
+
+countries <- unique(measure_df[["Country"]])
+countries <- countries[order(countries)]
+
+# Initialise data frames for binary measure data
+
+bindata = data.frame()
+bindata_cumulative = data.frame()
+
+for (country in countries) {
+  
+  countrymeasures <- measure_df[measure_df$Country==country,][c('Date_numeric','Measure_id')]
+
+  binmatrix <- matrix(FALSE,maxdate-mindate+1,dim(measurelist)[1])
+  binmatrix_cumulative <- matrix(FALSE,maxdate-mindate+1,dim(measurelist)[1])
+
+  i <- 1
+
+  for (day in c(mindate:maxdate))
+    
+    {
+    # loop over days from mindate until maxdate
+  
+    newmeasures <- unlist(countrymeasures[countrymeasures$Date_numeric==day,]$Measure_id)
+    previousmeasures <- unlist(countrymeasures[countrymeasures$Date_numeric<day,]$Measure_id)
+    binmatrix[i,newmeasures] <- TRUE
+    binmatrix_cumulative[i,newmeasures] <- TRUE
+    binmatrix_cumulative[i,previousmeasures] <- TRUE      
+
+    i <- i+1
+    
+  }
+
+  # binary encoding of measures taken in country
+
+  bindata_country <- as.data.frame(binmatrix)
+  bindata_country['Country'] <- country
+  bindata_country['Date'] <- list(mindate:maxdate)
+  
+  bindata_country_cumulative <- as.data.frame(binmatrix_cumulative)
+  bindata_country_cumulative['Country'] <- country
+  bindata_country_cumulative['Date'] <- list(mindate:maxdate)
+
+  # append to big table containing binary data on all countries
+
+  bindata <- rbind(bindata,bindata_country)
+  bindata_cumulative <- rbind(bindata_cumulative,bindata_country_cumulative)
+
+}
+
+names(bindata) <- append(measurelist$Measure,list('Country','Date'))
+names(bindata_cumulative) <- append(measurelist$Measure,list('Country','Date'))
+
+bindata['Date'] <- lapply(bindata['Date'],function(x) as.Date(x,origin='1970-1-1'))
+bindata_cumulative['Date'] <- lapply(bindata_cumulative['Date'],function(x) as.Date(x,origin='1970-1-1'))
+
+bindata <- bindata[unlist(append(list('Country','Date'),measurelist$Measure))]
+bindata_cumulative <- bindata_cumulative[unlist(append(list('Country','Date'),measurelist$Measure))]
+
+
+write.csv2(bindata,'bin_COVID19_measures.csv',row.names=FALSE)
+write.csv2(bindata_cumulative,'bin_COVID19_measures_cumulative.csv',row.names=FALSE)
+
+```
+
+```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4, results='hide',, warning = FALSE}
+# This chunk gets Johns Hopkins raw data and a make dataframe
+
+# Import data on number of cases, recovered, and deaths
+# We use the case data from the Johns Hopkins repository: https://github.com/CSSEGISandData/COVID-19
+# See https://linkinghub.elsevier.com/retrieve/pii/S1473309920301201
+
+library(dplyr)
+library(incidence)
+
+# JHU DATA
+confirmeddf <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", stringsAsFactors = F)
+deathsdf <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", stringsAsFactors = F)
+recovereddf <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv", stringsAsFactors = F)
+
+# List of countries to iterate
+countries <-  unique(c(confirmeddf$Country.Region, deathsdf$Country.Region, recovereddf$Country.Region))
+
+# Add HONG KOND as a country
+HongKong <- confirmeddf[1,]
+HongKong$Province.State <- ""
+HongKong$Country.Region <- "Hong Kong"
+HongKong[3:dim(HongKong)[2]] <- confirmeddf[confirmeddf$Province.State=="Hong Kong",3:dim(HongKong)[2]]
+confirmeddf <- rbind(confirmeddf,HongKong)
+
+HongKong <- recovereddf [1,]
+HongKong$Province.State <- ""
+HongKong$Country.Region <- "Hong Kong"
+HongKong[3:dim(HongKong)[2]] <- recovereddf[recovereddf$Province.State=="Hong Kong",3:dim(HongKong)[2]]
+recovereddf <- rbind(recovereddf ,HongKong)
+
+
+HongKong <- deathsdf[1,]
+HongKong$Province.State <- ""
+HongKong$Country.Region <- "Hong Kong"
+HongKong[3:dim(HongKong)[2]] <- deathsdf[deathsdf$Province.State=="Hong Kong",3:dim(HongKong)[2]]
+deathsdf <- rbind(deathsdf, HongKong)
+countries <- c(countries, "Hong Kong")
+
+
+# We convert the data frame from wide to long format
+ldf <- data.frame(country=NULL, date=NULL, confirmed=NULL, deaths=NULL, recovered=NULL)
+
+for (country in countries)
+{
+  # The first four columns contain the name of the country, location, etc. The time series win wide format starts from the fifth.
+  confirmeddf %>% 
+    filter(Country.Region == country) %>% 
+    summarise_at(5:ncol(confirmeddf), sum) -> confirmedcounts
+  date <- names(confirmeddf)[5:ncol(confirmeddf)] 
+  
+  # date are in a weird format, we convert them for R
+  date <- as.Date(gsub("\\.", "-", sub(".", "", date)), format = "%m-%d-%y")
+  confirmeddfsel <- data.frame(confirmed = as.numeric(confirmedcounts), date=date)
+  
+  # We repeat the above process for deaths and recovered time series
+  deathsdf %>% 
+    filter(Country.Region == country) %>% 
+    summarise_at(5:ncol(deathsdf), sum) -> deathscounts
+  date <- names(deathsdf)[5:ncol(deathsdf)] 
+  date <- as.Date(gsub("\\.", "-", sub(".", "", date)), format = "%m-%d-%y")
+  deathsdfsel <- data.frame(deaths = as.numeric(deathscounts), date=date)
+  
+  recovereddf %>% 
+    filter(Country.Region == country) %>% 
+    summarise_at(5:ncol(recovereddf), sum) -> recoveredcounts
+  date <- names(recovereddf)[5:ncol(recovereddf)] 
+  date <- as.Date(gsub("\\.", "-", sub(".", "", date)), format = "%m-%d-%y")
+  recovereddfsel <- data.frame(recovered = as.numeric(recoveredcounts), date=date)
+  
+  # inner_joins map all data by date so the long format has a column for confirmed, another for deaths, and a third one for recovered
+  newdf <- inner_join(confirmeddfsel, deathsdfsel)
+  newdf <- inner_join(newdf, recovereddfsel)
+  
+  # We add the country name and include this country in the full data frame
+  newdf$country = country
+  ldf <- rbind(ldf, newdf)
+}
+
+JH_data <- ldf[c(2:nrow(ldf)),]
+JH_data$newcases <- diff(ldf$confirmed)
+names(JH_data)[1] <- "cases"
+```
+
+```{r, echo=FALSE, message=FALSE, fig.width=8, fig.height=4, results='hide', warning = FALSE}
+# This chunk reads binary data of measures and make dataframe
+library(dplyr)
+library(stringr)
+
+# Data -- MEASURES ---
+NAMES_measures_csv <- read.table("bin_COVID19_measures_cumulative.csv", nrow = 1, stringsAsFactors = FALSE, sep = ";")
+measures <- read.table("bin_COVID19_measures_cumulative.csv", skip = 1, stringsAsFactors = FALSE, sep = ";")
+measures <- measures[, 1:length(NAMES_measures_csv)]
+names(measures) <-  NAMES_measures_csv
+
+# set names of some countries 
+# make it the same as in Johns Hopkins data
+measures$Country[measures$Country=="France (metropole)"]<- "France"
+measures$Country[measures$Country=="Taiwan"]<- "Taiwan*"
+measures$Country[measures$Country=="South Korea"]<- "Korea, South"
+measures$Country[measures$Country=="Czech Republic"]<- "Czechia"
+measures$Country[measures$Country=="Republic of Ireland"]<- "Ireland"
+measures$Country[measures$Country=="United States of America"]<- "US"
+
+
+measures <- measures[-which(measures$Country=="Diamond Princess"), ]
+
+countries_with_measures <- unique(measures$Country)
+
+# NAMES L2
+names_l2 <- names(measures[,c(3:dim(measures)[2])])
+for(ii in 1: length(names_l2)){
+  names_l2[ii]<- substr(names_l2[ii], str_locate(names_l2[ii], "L2")[2]+4, nchar(names_l2[ii]))
+}
+# str(names_l2)
+# str(unique(names_l2))
+# add dot to duplicated l2 names !! to keep them for plots
+names_l2[duplicated(names_l2)] <- paste0(names_l2[duplicated(names_l2)], ".")
+numer_of_measures <- length(names_l2)
+
+# select names of L1
+# name_l1 
+# 7 unique levels
+names_l1 <- names(measures[,c(3:dim(measures)[2])])
+for(ii in 1:length(names_l1)){
+  names_l1[ii]<- substr(names_l1[ii], 6, str_locate(names_l1[ii], "L2")[1]-5)
+}
+# str(names_l1)
+# str(unique(names_l1))
+```
+
+# Visualise the timeline of implementation of the government interventions using a heatmap
+We propose to visualise the time series of the dates of implementation of the NPIs recorded in the CCCSL at level 2 (categories) in the 56 countries using a heat map. To highlight country-based differences in the timeline of implementation thorough the epidemic, we used the epidemic age instead of calendar time and considered t0 as the day when the number of confirmed cases reaches 10.
+```{r, echo=FALSE, message=FALSE, results='hide', warning = FALSE}
+# This chunk makes the heatmap based on time of implementation of measures
+library(reshape2)
+library(ggplot2)
+library( RColorBrewer)
+library(svglite)
+
+# matrix - each country is presented with one row
+# each NPI is presented with one column
+# time of implentation is presented with epidemic age
+# zero day is defined as day with 10 cases (the script indicates which command to change to modifiy t0)
+
+first_date_matrix <- matrix(NA, nrow=length(countries_with_measures), ncol=(ncol(measures)-2))
+min_date_10_cases <- rep(0, length(countries_with_measures))
+
+for(i in 1:length(countries_with_measures)) {
+  country.name <- countries_with_measures[i]
+  onecountry_measures <- measures[measures$Country==country.name, ]
+  JH_data_one_country <-  JH_data %>% filter(country == country.name)
+  date_cases <- JH_data_one_country$date[JH_data_one_country$cases>=10]
+  # use: date_cases <- JH_data_one_country$date[JH_data_one_country$cases>=100] for t0 = day when 100 cases are reported
+  # use: date_cases <- JH_data_one_country$date[JH_data_one_country$cases>=200] for t0 = day when 200 cases are reported
+  if(length(date_cases)!=0){
+    min_date_10_cases[i] <- min(date_cases) # change min_date_10_cases[i] to min_date_100_cases[i] or min_date_200_cases[i]
+    if(nrow(JH_data_one_country)>1 & nrow(onecountry_measures)>0){
+      for(j in 3:dim(measures)[2]){
+        if(sum(onecountry_measures[,j])>0){
+          min_date <- min(onecountry_measures$Date[onecountry_measures[,j]])
+          if(!is.na(min_date) & !is.na(min_date_10_cases[i])){i     # change min_date_10_cases[i] to min_date_100_cases[i] or min_date_200_cases[i]
+            min_date <- as.Date(min_date)
+            first_date_matrix[i,(j-2)] <- as.numeric(min_date - min_date_10_cases[i])    # change min_date_10_cases[i] to min_date_100_cases[i] or min_date_200_cases[i]
+          } }
+      } } } } 
+
+
+
+# matrix to da frame
+data_for_plot <- as.data.frame(first_date_matrix)
+names(data_for_plot) <- names_l2
+data_for_plot$Country <- countries_with_measures
+# str(data_for_plot)
+# dim(data_for_plot)
+# sum(!is.na(data_for_plot))
+
+# melt the data frame
+# data_for_plot 
+# dim(data_for_plot )
+# [1] 52 78
+df <- melt(data_for_plot ,  id.vars = c('Country'), variable.name = 'Measures')
+names(df) <- c("Country", "Measures","Time_difference_Days"  )
+# head(df)
+# dim(df)
+# [1] 4004    3
+
+
+
+# add L1 category to L2 measures
+# need for ploting
+names_l1_l2 <- data.frame(names_l1, names_l2, stringsAsFactors = F)
+df <- merge(df, names_l1_l2, by.x = "Measures", by.y ="names_l2")
+
+# names(df)
+# head(df)
+df <- df[order(df$names_l1),]
+df$names_l1 <- as.factor(df$names_l1)
+# head(df)
+
+# make vector of colors 
+# one color for each L1 level
+# use color palette "Dark2"
+cols <- brewer.pal(length(unique(names_l1)),"Dark2")
+x <- table(names_l1_l2$names_l1)
+x <- unname(x)
+col <- NULL
+for(i in 1:length(x)){
+  col <- c(col, rep(cols[i], x[i]))
+}
+
+plot.heatmap <- ggplot(df, aes(Country, Measures,  fill= Time_difference_Days)) + 
+  geom_tile() +
+  scale_fill_gradient(low="lightgreen", high="red", na.value="darkgray", breaks=c(-75, -50, -25, 0, 25, 50, 75)) +
+  theme(axis.text.x = element_text(angle = 45, size = 8, hjust = 1, face = "bold"), # add size
+        axis.text.y = element_text(colour = col, size = 8, face = "bold"), # size was 8
+        text = element_text(family = "Helvetica")) +
+  guides(fill=guide_legend(title="Time difference [Days]"))            
+name <- "Measures_Countries_time_of_activation_zeroday10cases.png"
+
+#To export the heat map and save it as high quality figure
+#ggsave(plot.heatmap,  file = name,  width = 33*1.25, height = 27 *1.25, units = "cm", dpi=1200) 
+#name <- "Measures_Countries_time_of_activation_zeroday10cases.eps"
+#ggsave(plot.heatmap,  file = name,  width = 33*1.25, height = 27 *1.25, units = "cm", dpi=1200) 
+ 
+# Warning message:
+# Vectorized input to `element_text()` is not officially supported.
+# Results may be unexpected or may change in future versions of ggplot2.
+
+# show the saved plot
+#print(plot.heatmap)
+```
+
+#### Fig. 2. Heat map of the date of implementation of the NPIs recorded in the CCCSL at level 2 (categories) in 56 countries . Time is in epidemic age with t0 = day when 10 cases were reported
+```{r plot.heatmap, echo=FALSE, fig.width=15,fig.height=20}
+plot(plot.heatmap)
+```
+
+# Country-cluster analysis of the aggressiveness and responsiveness of the government response to COVID-19
+
+ In order to partition the countries based on the aggressiveness of the control strategy (number of measures) and responsiveness (timeline), we propose a k-means clustering method (see description of the method: https://doi.org/10.3390/j2020016).
+ 
+ Our analysis is based on data recorded in the CCCSL dataset as of 12 July 2020.  
+ A static version is available at: https://github.com/amel-github/CCCSL-Codes/blob/master/COVID19_non-pharmaceutical-interventions_version2_utf8_static_2020-07-12.csv
+ 
+
+ We focused on mandatory government interventions (i.e. the theme “Risk communication” was not included) recorded in the CCCSL at level 2 (categories) that appeared in at least 15 countries, leading to a total number of 40 categories.
+
+## Method used: k-means clustering
+The clustering algorithm used the date of implementation of the interventions in each country, based on the epidemic age. 
+
+We considered:  
+"Anticipatory measures" as those implemented before day when 10 cases were reported;  
+"Early measures" as those implemented at the beginning of the epidemic, i.e. between day when 10 cases were reported and day when 200 cases were reported;  
+"Late measures" as those implemented in a later stage of the epidemic, i.e. after day when 200 cases were reported. The algorithm also takes into account the number of measures implemented at these different epidemic ages.  
+
+ Each country is described using three variables:  
+1. Number of anticipatory measures;  
+2. Number of early measures;  
+3. Number of late measures.
+
+ The optimal number of cluster k is determined using the Elbow method. Briefly, the elbow methods runs k-means clustering on the dataset for a range of values of k (set here from 1 to 15), and for each value of k calculates the sum of squared errors (SSE). We then plot the SSE for each value of k and identified the best value of k where the line chart looks like an arm ("elbow").
+
+## Results
+```{r, echo=FALSE, message=FALSE, results='hide', warning = FALSE}
+library(tidyverse)
+library(plotly)
+library(dplyr)
+library(ggplot2)
+
+# Clustering
+library(cluster) 
+
+first_date_matrix <- matrix(NA, nrow=length(countries_with_measures), ncol=(ncol(measures)-2))
+min_date_10_cases <- rep(0, length(countries_with_measures))
+min_date_first_death <- rep(0, length(countries_with_measures))
+min_date_200_cases <- rep(NA, length(countries_with_measures))
+
+for(i in 1:length(countries_with_measures)) {
+  country.name <- countries_with_measures[i]
+  onecountry_measures <- measures[measures$Country==country.name, ]
+  JH_data_one_country <-  JH_data %>% filter(country == country.name)
+  date_cases <- JH_data_one_country$date[JH_data_one_country$cases>=10]
+  min_date_first_death[i] <- min(JH_data_one_country$date[JH_data_one_country$deaths>0])
+  date_cases_200 <- JH_data_one_country$date[JH_data_one_country$cases>=200]
+   if(length(date_cases)!=0){
+    min_date_10_cases[i] <- min(date_cases) 
+    if(length(date_cases_200)!=0){
+    min_date_200_cases[i] <- min(date_cases_200 ) }
+    if(nrow(JH_data_one_country)>2 & nrow(onecountry_measures)>0){
+      for(j in 3:dim(measures)[2]){
+        if(sum(onecountry_measures[,j])>0){
+          min_date <- min(onecountry_measures$Date[onecountry_measures[,j]])
+          if(!is.na(min_date) & !is.na(min_date_10_cases[i])){i
+            min_date <- as.Date(min_date)
+            first_date_matrix[i,(j-2)] <- as.numeric(min_date - min_date_10_cases[i])
+          } }
+      } } } } 
+
+# min_date_first_death 
+min_date_first_death <- as.Date( min_date_first_death, origin = "1970-01-01")
+
+# min_date_10_cases
+min_date_10_cases <- as.Date( min_date_10_cases, origin = "1970-01-01")
+
+# min_date_200_cases
+min_date_200_cases <- as.Date( min_date_200_cases, origin = "1970-01-01")
+# "Liechtenstein" "Syria" do not have 200 cases still -- 
+# countries_with_measures[is.na(min_date_200_cases)]
+min_date_200_cases[is.na(min_date_200_cases)] <- "2020-05-01"
+min_date_200_cases
+
+time_window_10_to_200_cases <- as.numeric(min_date_200_cases-min_date_10_cases)
+
+# European countries
+# which_countries <- c(1,2,3,4,7,8,9,12,13,14,15,16,19,23,24,28,30,31, 34,35,37,38,39,40,41,43,44,45,46,50)
+# choosen_countries <- countries_with_measures
+
+
+# filter only choosen measures
+treshold_num_coutries <- 15
+selected_measures <- "Risk communication"  
+choosen_measures <- str_detect(names(measures), selected_measures)[3:dim(measures)[2]]
+first_date_matrix_filtered <- first_date_matrix[,-which(choosen_measures)]
+
+selected_measures <- "Returning to normal life" 
+choosen_measures <- str_detect(names(measures), selected_measures)[3:dim(measures)[2]]
+first_date_matrix_filtered <- first_date_matrix[,-which(choosen_measures)]
+
+
+measures_size <- colSums(!is.na(first_date_matrix_filtered))
+first_date_matrix_filtered <- first_date_matrix_filtered[,which(measures_size>=treshold_num_coutries )]
+# dim(first_date_matrix_filtered)
+
+
+# names of selected measures
+filtered_names_l2 <- names_l2[-which(choosen_measures)]
+filtered_names_l2 <- filtered_names_l2[which(measures_size>=treshold_num_coutries )]
+# str(filtered_names_l2)
+# filtered_names_l2
+
+first_date_matrix_filtered_scaled <- first_date_matrix_filtered
+first_date_matrix_filtered_scaled[!is.na(first_date_matrix_filtered) & first_date_matrix_filtered < 0  ] <- 0
+# first_date_matrix_filtered_scaled[!is.na(first_date_matrix_filtered) & first_date_matrix_filtered >= (-25) &  first_date_matrix_filtered <0 ] <- 1
+for(i in 1:length(countries_with_measures)){
+
+first_date_matrix_filtered_scaled[i,!is.na(first_date_matrix_filtered[i,]) & first_date_matrix_filtered[i,] >=0 &  first_date_matrix_filtered[i,] < time_window_10_to_200_cases[i]] <- 1
+
+first_date_matrix_filtered_scaled[i, !is.na(first_date_matrix_filtered[i,]) & first_date_matrix_filtered[i,] >= time_window_10_to_200_cases[i] ] <- 2
+
+}# first_date_matrix_filtered_scaled[first_date_matrix_filtered >30 ] <-3
+first_date_matrix_filtered_scaled[is.na(first_date_matrix_filtered)] <-4
+```
+
+```{r, echo=FALSE, warning = FALSE}
+list.categ <- cbind (c(1:40),filtered_names_l2)
+kable(list.categ, col.names = NULL, booktabs = T,
+             caption = "List of the 40 categories used")
+```
+
+```{r, echo=FALSE, message=FALSE, results='hide', warning = FALSE}
+# data frame for clustering
+df <- NULL
+df$chosen_coutries <- countries_with_measures
+df$Anticipatory_measures <- rowSums(first_date_matrix_filtered_scaled == 0)
+df$Early_measures <- rowSums(first_date_matrix_filtered_scaled == 1)
+df$Late_measures <- rowSums(first_date_matrix_filtered_scaled == 2)
+#df$after_20th_day <- rowSums(first_date_matrix_filtered_scaled == 3)
+# df$not_implemented <- rowSums(first_date_matrix_filtered_scaled == 4)
+
+
+df <- as.data.frame(df)
+df$chosen_coutries <- as.character(df$chosen_coutries)
+# str(df)
+# summary(df)
+
+
+# ************** KMEANS *************
+
+
+# optimal number of clusters
+ wssplot <- function(data, nc=15, seed=1){
+    wss <- (nrow(data)-1)*sum(apply(data,2,var))
+    for (i in 2:nc){
+       set.seed(seed)
+       wss[i] <- sum(kmeans(data, centers=i,iter.max = 10000)$withinss)}
+    plot(1:nc, wss, type="b", xlab="Number of groups", cex.main = 0.8, cex.lab = 0.8, cex.axis = 0.8,
+         ylab="Sum of squares within a group", main = "The optimal number of clusters k - Elbow method")}
+ 
+ optimal_number_k_plot <- wssplot(df[,c(2:(ncol(df)))], nc = 15)
+ # *********************************
+ 
+ 
+ NUMBER_OF_CLUSTERS <- 8
+ cluster.results <- kmeans(df[,c(2:ncol(df))], NUMBER_OF_CLUSTERS , nstart = 20, iter.max = 10000)
+ cluster.results
+ # cluster.results$size
+ # cluster.results$centers
+ countries_with_measures[which(cluster.results$cluster==1)]
+ countries_with_measures[which(cluster.results$cluster==2)]
+ countries_with_measures[which(cluster.results$cluster==3)]
+ countries_with_measures[which(cluster.results$cluster==4)]
+ countries_with_measures[which(cluster.results$cluster==5)]
+ countries_with_measures[which(cluster.results$cluster==6)]
+ countries_with_measures[which(cluster.results$cluster==7)]
+ countries_with_measures[which(cluster.results$cluster==8)]
+ 
+ # data frame 
+ df$KM <- cluster.results$cluster
+ df$size <- df$Anticipatory_measures + df$Early_measures + df$Late_measures
+ df$KM <- as.factor(df$KM)
+ df$size <- (df$size/max(df$size))
+ str(df)
+ #summary(df)
+```
+
+As of date of publication, using the dataset dated 2020-07-12, the best value of k was **eight**, explaining **82.8%** of the variance
+
+
+### List of the countries per cluster         
+
+*Cluster 1 includes:* `r countries_with_measures[which(cluster.results$cluster==1)]`;   
+*Cluster 2 includes:* `r countries_with_measures[which(cluster.results$cluster==2)]`;  
+*Cluster 3 includes:* `r countries_with_measures[which(cluster.results$cluster==3)]`;  
+*Cluster 4 includes:* `r countries_with_measures[which(cluster.results$cluster==4)]`;  
+*Cluster 5 includes:* `r countries_with_measures[which(cluster.results$cluster==5)]`;  
+*Cluster 6 includes:* `r countries_with_measures[which(cluster.results$cluster==6)]`;  
+*Cluster 7 includes:* `r countries_with_measures[which(cluster.results$cluster==7)]`;  
+*Cluster 8 includes:* `r countries_with_measures[which(cluster.results$cluster==8)]`.  
+
+
+```{r, echo=FALSE, warning = FALSE}
+table.clusters <- cbind(cluster.results$size, cluster.results$centers[,c(1:3)], cluster.results$withinss)
+colnames(table.clusters) <- c("Size","Anticipatory measures", "Early measures", "Late measures", "Within cluster sum of squares by cluster")
+kable(table.clusters,  booktabs = T,
+             caption = "Summary of the cluster characteristics")
+```
+
+
+\pagebreak
+
+#### Fig.3. Country-cluster analysis based on the number of mandatory government interventions and respective dates of implementation, as calculated using the epidemic age (t0 = day when 10 cases were reported)
+**Note**: An interactive 3D version is available at: http://covid19-interventions.com/CountryMeasuresHeatmap.svg and can be produced using our codes available at: https://github.com/amel-github/CCCSL-Codes (follow instructions in the README file)
+
+```{r, echo=FALSE, message=FALSE, results='hide', fig.width=7,fig.height=7, warning = FALSE}
+library(plot3D)
+library(countrycode)
+
+df$CC3 <- countrycode(df$chosen_coutries, origin="country.name", destination="iso3c")
+
+# We manually set Kosovo's ISO 3 code to the convention used in the dataset
+df$CC3[df$chosen_coutries=="Kosovo"] <- "RKS"
+
+
+#Coordinates for labels
+x <- df$Early_measures
+y <- df$Late_measures
+z <- df$Anticipatory_measures
+
+#We manually shift some labels to help visibility in the plot
+z[df$CC3 == "SVN"] <- z[df$CC3 == "SVN"] - 0.5
+z[df$CC3 == "SYR"] <- z[df$CC3 == "SYR"] + 0.25
+z[df$CC3 == "SLV"] <- z[df$CC3 == "SLV"] - 0.25
+z[df$CC3 == "FIN"] <- z[df$CC3 == "FIN"] + 0.25
+z[df$CC3 == "KAZ"] <- z[df$CC3 == "KAZ"] - 0.25
+x[df$CC3 == "KAZ"] <- x[df$CC3 == "KAZ"] + 0.25
+y[df$CC3 == "KAZ"] <- y[df$CC3 == "KAZ"] + 0.75
+y[df$CC3 == "BEL"] <- y[df$CC3 == "BEL"] - 0.25
+x[df$CC3 == "BEL"] <- x[df$CC3 == "BEL"] + 0.25
+
+pdf("clustering.pdf") #To convert to eps, you can run in linux pdftops and then ps2eps
+s3d <- scatter3D(x = df$Early_measures,
+                     y = df$Late_measures,
+                     z= df$Anticipatory_measures, pch = 19, 
+                     col=hcl.colors(8, palette = "Set 3"), colvar=as.numeric(df$KM),
+                     xlab = "Early measures", 
+                     ylab = "Late measures", 
+                     zlab = "Anticipatory measures",
+                     cex.symbols = 4*df$size, phi = 10, theta=-225, bty="b2", colkey=FALSE, ticktype= "detailed", r=4)
+
+text3D(x,y,z, labels = df$CC3, cex= 0.5, col = "black", adj=0.5, add = T)
+
+dev.off()
+
+s3d <- scatter3D(x = df$Early_measures,
+                     y = df$Late_measures,
+                     z= df$Anticipatory_measures, pch = 19, 
+                     col=hcl.colors(8, palette = "Set 3"), colvar=as.numeric(df$KM),
+                     xlab = "Early measures", 
+                     ylab = "Late measures", 
+                     zlab = "Anticipatory measures",
+                     cex.symbols = 4*df$size, phi = 10, theta=-225, bty="b2", colkey=FALSE, ticktype= "detailed", r=4)
+
+text3D(x,y,z, labels = df$CC3, cex= 0.5, col = "black", adj=0.5, add = T)
+```
+
+
+
+
