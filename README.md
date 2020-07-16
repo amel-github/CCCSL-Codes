@@ -53,11 +53,15 @@ These instructions will get you a copy of the project up and running on your loc
 
 Install and load packages:
 
+* countrycode()
+
 * dplyr (0.8.5)
 
 * factoextra (1.0.7)
 
 * ggplot2 (3.3.0)
+
+* plot3D()
 
 * plotly (4.9.2.1)
 
