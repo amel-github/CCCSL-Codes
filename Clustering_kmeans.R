@@ -4,6 +4,7 @@
 ## Script purpose: K-means clustering to cluster countries based on the timeline of the implemented measures
 ## Date:12.07.2020.
 ## Authors: Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
+## Modified by David Garcia
 ##################################################
 
 library(tidyverse)
