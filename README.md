@@ -25,7 +25,7 @@ Three R scripts can be run to perform automated validations and summaries of the
 
 * To generate the master list of codes: [Validation/GenerateMasterLists_CCCSL.R](Validation/GenerateMasterLists_CCCSL.R)
 
-* To check for redundancy in codes: [Validation/CheckUniqueCombinations.R](Validation/CheckUniqueCombinations.R)
+* To check for consistency in codes: [Validation/CheckUniqueCombinations.R](Validation/CheckUniqueCombinations.R)
 
 ## Usage example of the CCCSL Dataset #1: Visualisation of the time-series of the date of NPI implementation using a heat map
 We propose to visualise the time series of the dates of implementation of the NPIs recorded in the CCCSL at level 2 (categories) in the 56 countries using a heat map. To highlight country-based differences in the timeline of implementation thorough the epidemic, we used the epidemic age instead of calendar time and considered t0 as the day when the number of confirmed cases reaches 10.
