@@ -86,13 +86,13 @@ first_date_matrix_filtered_scaled[is.na(first_date_matrix_filtered)] <-4
 
 # data frame for clustering
 df <- NULL
-df$chosen_coutries <- countries_with_measures
+df$chosen_countries <- countries_with_measures
 df$Anticipatory_measures <- rowSums(first_date_matrix_filtered_scaled == 0)
 df$Early_measures <- rowSums(first_date_matrix_filtered_scaled == 1)
 df$Late_measures <- rowSums(first_date_matrix_filtered_scaled == 2)
 
 df <- as.data.frame(df)
-df$chosen_coutries <- as.character(df$chosen_coutries)
+df$chosen_countries <- as.character(df$chosen_countries)
 
 # ************** KMEANS *************
 # optimal number of clusters
@@ -152,7 +152,7 @@ p <- plot_ly(
                camera = list(eye = list(x=1.25, y=1.3, z = 1.5)))
  ) 
 p = add_trace(p, x = ~Late_measures, y = ~Early_measures, z = ~Anticipatory_measures,
-             mode = 'text+markers', text = ~chosen_coutries,
+             mode = 'text+markers', text = ~chosen_countries,
              textfont = list(color =  'grey', size = 12, family = "Helvetica" ), showlegend = FALSE) 
 
 # `line.width` does not currently support multiple values. - 
