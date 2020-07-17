@@ -1,7 +1,7 @@
 ##################################################
 ## Project: CCCSL: Complexity Science Hub Covid-19 Control Strategies List (2020)
 ## Clustering of countries based on implemented measures
-## Script purpose: This scripts makes heatmaps based on time of implementation of measures
+## Script purpose: This script makes a heatmap based on time of implementation of measures
 ## Date:12.07.2020.
 ## Authors:  Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
 ##################################################
