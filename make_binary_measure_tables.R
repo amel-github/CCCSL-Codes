@@ -2,7 +2,7 @@
 ## Project: CCCSL: Complexity Science Hub Covid-19 Control Strategies List (2020)
 ## Clustering of countries based on implemented measures
 ## Script purpose: This script creates binary representations of the CCCSL data set on category level (L2)
-## Date:12.04.2020.
+## Date:12.07.2020.
 ## Authors: Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
 ##################################################
 
