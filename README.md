@@ -117,7 +117,7 @@ Download the data from [COVID-19 Data Repository by the Center for Systems Scien
  
 ####  Step 3
 Read data from the binary file take names of all countries, all L1 measures, all L2 measures.
- * [Get_measures_data.R]([Get_measures_data.R])
+ * [Get_measures_data.R](Get_measures_data.R)
  
 #### Step 4
 Heat map of the timeline of NPI implementation by country.
