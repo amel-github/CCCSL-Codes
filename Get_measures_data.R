@@ -4,7 +4,7 @@
 ## Script purpose: This scripts reads binary data of measures and make dataframe
 
 ## Date:12.07.2020.
-## Authors:  Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
+## Authors:  Elma Hot Dervic
 ##################################################
 
 library(dplyr)
