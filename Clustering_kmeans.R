@@ -1,7 +1,7 @@
 ##################################################
 ## Project: CCCSL: Complexity Science Hub Covid-19 Control Strategies List (2020)
 ## Visualise the aggressiveness (number of NPIs) and responsiveness (timeline) of the government control strategies
-## Script purpose: K-means clustering to clusters countries based on the timeline of the implemented measures
+## Script purpose: K-means clustering to cluster countries based on the timeline of the implemented measures
 ## Date:12.07.2020.
 ## Authors: Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive, David Garcia
 ##################################################
