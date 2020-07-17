@@ -1,8 +1,8 @@
 ##################################################
 ## Project: CCCSL: Complexity Science Hub Covid-19 Control Strategies List (2020)
 ## Clustering of countries based on implemented measures
-## Script purpose: This scripts get Johns Hopkins raw data and make dataframe
-## JH_data --- "confirmed"  "date"      "deaths"    "recovered" "country"   "newcases" 
+## Script purpose: This script gets Johns Hopkins raw data and makes dataframe
+## JHU_data --- "confirmed"  "date"      "deaths"    "recovered" "country"   "newcases" 
 ## Date:12.07.2020.
 ## Authors:  David Garcia, Amélie Desvars-Larrive, Thomas Niederkrotenthaler
 ## Modified by Elma Dervic
@@ -52,7 +52,7 @@ for (country in countries)
     summarise_at(5:ncol(confirmeddf), sum) -> confirmedcounts
   date <- names(confirmeddf)[5:ncol(confirmeddf)] 
   
-  # date are in a weird format, we convert them for R
+  # dates are in a weird format, we convert them for R
   date <- as.Date(gsub("\\.", "-", sub(".", "", date)), format = "%m-%d-%y")
   confirmeddfsel <- data.frame(confirmed = as.numeric(confirmedcounts), date=date)
   
