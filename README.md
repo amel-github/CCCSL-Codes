@@ -129,14 +129,14 @@ To plot and save the Measures_Countries_time_of_activation\_zeroday10cases.png a
 #### Step 5
 In order to partition the countries based on the aggressiveness of the control strategy (number of measures) and responsiveness (timeline), we propose a [k-means clustering method](https://doi.org/10.3390/j2020016).
 
-To calculate the clustering and visualize the results, run [Clustering_kmeans.R](Clustering_kmeans.R)<br>
+To calculate the clustering and visualise the results, run [Clustering_kmeans.R](Clustering_kmeans.R)<br>
  
 Each country is characterised with regard to the number of anticipatory, early, and late measures.<br>
 x-axis: late measures;<br>
 y-axis: early measures;<br>
 z-axis: anticipatory measures.
 
-An interactive version of [Fig. 3](Clustering_kmeans_static.svg) is available online at: [http://covid19-interventions.com/CountryClusters.html.](http://covid19-interventions.com/CountryClusters.html)
+An interactive version of the clustering graph is available online at: [http://covid19-interventions.com/CountryClusters.html.](http://covid19-interventions.com/CountryClusters.html)
 
 
 ## Authors
