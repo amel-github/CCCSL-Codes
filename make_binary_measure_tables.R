@@ -3,7 +3,7 @@
 ## Clustering of countries based on implemented measures
 ## Script purpose: This script creates binary representations of the CCCSL data set on category level (L2)
 ## Date:12.07.2020.
-## Authors: Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
+## Authors: Nils Haug
 ##################################################
 
 # Downloads the CCCSL data set on implemented non-pharmaceutical interventions (NPI) and writes the two csv files "bin_COVID19_measures.csv" 
