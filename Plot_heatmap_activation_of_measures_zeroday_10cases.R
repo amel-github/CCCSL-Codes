@@ -3,7 +3,8 @@
 ## Clustering of countries based on implemented measures
 ## Script purpose: This script makes a heatmap based on time of implementation of measures
 ## Date:12.07.2020.
-## Authors:  Elma Hot Dervic, Nils Haug, Amélie Desvars-Larrive
+## Authors:  Elma Hot Dervic
+## Modified by David Garcia
 ##################################################
 
 library(reshape2)
