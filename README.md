@@ -152,7 +152,7 @@ See also the list of [contributors](http://covid19-interventions.com) who partic
 ## License
 
 This project is licensed under the 
-CC BY-SA 4.0 License - see the [CC BY-SA 4.0d](https://creativecommons.org/licenses/by-sa/4.0/deed.en) file for details
+CC BY-SA 4.0 License - see the [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en) file for details
 
 ## Acknowledgments
 
