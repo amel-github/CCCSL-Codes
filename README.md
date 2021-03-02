@@ -21,7 +21,8 @@ map](#Usage3)
 [Usage example of the CCCSL Dataset \#4: Country-cluster analysis of the
 control strategies](#Usage4)  
 [Usage examples \#3 and \#4: Getting Started](#Getting%20Started)  
-[Authors](#Authors) [License](#License)  
+[Authors](#Authors)  
+[License](#License)  
 [Acknowledgements](#Acknowledgements)  
 [Funding](#Funding) [Contact](#Contact)
 
