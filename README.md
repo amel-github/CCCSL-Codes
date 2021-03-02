@@ -24,7 +24,8 @@ control strategies](#Usage4)
 [Authors](#Authors)  
 [License](#License)  
 [Acknowledgements](#Acknowledgements)  
-[Funding](#Funding) [Contact](#Contact)
+[Funding](#Funding)  
+[Contact](#Contact)
 
 ## Purpose <a name="Purpose"></a>
 
