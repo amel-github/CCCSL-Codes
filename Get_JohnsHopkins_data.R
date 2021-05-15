@@ -83,5 +83,6 @@ for (country in countries)
 
 JH_data <- ldf[c(2:nrow(ldf)),]
 JH_data$newcases <- diff(ldf$confirmed)
+JH_data$newcases[JH_data$newcases<0] <- 0
 names(JH_data)[1] <- "cases"
 
